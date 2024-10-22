@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminMiddleware
 {
@@ -11,16 +12,15 @@ class AdminMiddleware
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     * @param  \Closure  $next
+     * @return mixed
      */
-    public function handle($request, Closure $next)
-{
-    if (auth()->check() && auth()->user()->role === 'admin') {
-        return $next($request);
+    public function handle(Request $request, Closure $next)
+    {
+        if (Auth::check() && Auth::user()->role == 'admin') {
+            return $next($request);
+        }
+
+        return redirect('/')->with('error', 'You do not have admin access.');
     }
-
-    return redirect('/'); // Redirect to homepage or another route if not admin
-}
-
 }

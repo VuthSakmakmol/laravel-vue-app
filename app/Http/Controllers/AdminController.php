@@ -9,10 +9,22 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $pages = Page::all();
-        return view('admin.dashboard', compact('pages'));
+        return view('admin.dashboard');  // Make sure this points to the correct view
     }
 
+    // Ensure the user is authenticated as an admin
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    // Dashboard method for the admin
+    public function dashboard()
+    {
+        // Return the admin dashboard view
+        return view('admin.dashboard');
+    }
+    
     public function create()
     {
         return view('admin.create');
